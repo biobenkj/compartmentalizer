@@ -26,9 +26,6 @@ mat <- matrix(sample(c(1,-1), 10000, replace = TRUE), ncol = 100)
 #Correct matrix diag
 diag(mat) <- 1
 
-#Squeeze
-mat <- mat * 0.999999
-
 #Transform
 mat.transform <- fisherZ(mat)
 

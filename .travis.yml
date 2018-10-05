@@ -1,8 +1,29 @@
 language: r
+
+r: 
+  - bioc-devel
+
 cache: packages
-r:
-  - oldrel
-  - release
-  - devel
-after_success:
-  - Rscript -e 'library(covr);codecov()'
+
+warnings_are_errors: false
+
+script:
+  - Rscript -e "library(devtools); devtools::check()"
+ 
+r_github_packages:
+  - r-lib/covr
+
+bioc_packages: 
+  - gmapR
+  - IRanges
+  - S4Vectors
+  - Rsamtools
+  - Biostrings
+  - rtracklayer
+  - BiocGenerics
+  - Homo.sapiens
+  - VariantTools
+  - GenomicRanges
+  - GenomicAlignments 
+  - VariantAnnotation
+  - SummarizedExperiment

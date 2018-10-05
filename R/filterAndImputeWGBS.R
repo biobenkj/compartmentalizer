@@ -17,17 +17,22 @@
 #'
 #' @return Filtered and imputed matrix 
 #' @import biscuiteer
-#' @import bsseq
+#' @import impute
+#' @import Homo.sapiens
 #'
 #' @export
 #' 
 #' @examples 
 #' 
+#' library(biscuiteer)
+#' library(Homo.sapiens)
+#' library(impute)
+#' 
 #' #Load in some example data
-#' data(cell_cycle_hansen_chr14, package = "compartmap")
+#' data(cell_cycle_hansen_chr22, package = "compartmap")
 #' 
 #' #Filter and impute missing data
-#' filt.imputed.chr14 <- filterAndImputeWGBS(data.chr14)
+#' filt.imputed.chr22 <- filterAndImputeWGBS(data.chr22)
 
 #Filter and impute missing values prior to binning
 filterAndImputeWGBS <- function(obj, k = 0.5, minCov = 3, minSamp = 2, rowmax = 0.5, colmax = 0.8, openseafilt = FALSE, genome = "hg19") {

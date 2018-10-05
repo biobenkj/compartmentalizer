@@ -43,6 +43,10 @@ compartment estimates
 This function estimates A/B compartments with some Dirichlet smoothing and shrinking towards a global mean of targets or across samples
 }
 \examples{
-data(cell_cycle_hansen_chr14, package = "compartmap")
-wgbs_compartments <- getWGBSABsignal(data.chr14, parallel = FALSE, chr = "chr14")
+library(biscuiteer)
+library(Homo.sapiens)
+library(impute)
+
+data(cell_cycle_hansen_chr22, package = "compartmap")
+wgbs_compartments <- getWGBSABsignal(data.chr22, parallel = FALSE, chr = "chr22")
 }

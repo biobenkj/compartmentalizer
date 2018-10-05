@@ -19,14 +19,11 @@
 #' #Correct matrix diag
 #' diag(mat) <- 1
 #' 
-#' #Squeeze
-#' mat <- mat * 0.999999
-#' 
 #' #Transform
 #' mat.transform <- fisherZ(mat)
 
 fisherZ <- function(cormat) {
-  if (diag(cormat)[1] == 1) cormat <- .squeezeit(cormat)
+  if (any(cormat) == 1) cormat <- .squeezeit(cormat)
   atanh(cormat)
 }
 
@@ -50,9 +47,6 @@ fisherZ <- function(cormat) {
 #' 
 #' #Correct matrix diag
 #' diag(mat) <- 1
-#' 
-#' #Squeeze
-#' mat <- mat * 0.999999
 #' 
 #' #Transform
 #' mat.transform <- fisherZ(mat)

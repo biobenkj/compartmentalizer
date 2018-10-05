@@ -27,20 +27,28 @@
 #' @import Homo.sapiens
 #' @import Mus.musculus
 #' @import bsseq
+#' @import minfi
 #' 
 #' @export
 #'
 #' @examples
+#' 
+#' library(biscuiteer)
+#' library(Homo.sapiens)
+#' library(impute)
+#' 
 #' #ATAC-seq data
-#' data(bulkATAC_raw_filtered, package = "compartmap")
-#' atac_compartments <- getCompartments(filtered.data, type = "atac", parallel = FALSE, chrs = "all")
-#' 
-#' #WGBS data
-#' data(cell_cycle_hansen_chr14, package = "compartmap")
-#' wgbs_compartments <- getCompartments(data.chr14, type = "wgbs", parallel = FALSE, chrs = "chr14")
-#' 
+#' data(bulkATC_raw_filtered_chr14, package = "compartmap")
+#' atac_compartments <- getCompartments(filtered.data, type = "atac", parallel = FALSE, chrs = "chr14")
+#'
 #' #450k data
+#' data(meth_array_450k_chr14, package = "compartmap")
+#' array_compartments <- getCompartments(array.data.chr14, type = "array", parallel = FALSE, chrs = "chr14")
 #' 
+#' \dontrun{
+#' #WGBS data
+#' data(cell_cycle_hansen_chr22, package = "compartmap")
+#' wgbs_compartments <- getCompartments(data.chr22, type = "wgbs", parallel = FALSE, chrs = "chr22", preprocess = TRUE)}
 
 getCompartments <- function(obj, type = c("atac", "wgbs", "array"), res = 1e6, parallel = FALSE,
                              chrs = "chr1", shrink.targets = NULL, regions = NULL, genome = "hg19",
@@ -51,6 +59,23 @@ getCompartments <- function(obj, type = c("atac", "wgbs", "array"), res = 1e6, p
     type <- match.arg(type)
   } else {
     stop("Don't know what to do with the supplied type argument. Can be 'atac', 'wgbs', or 'array'.")
+  }
+  
+  # Check object class for a given type
+  if (type == "wgbs") {
+    if (!is(obj, "BSseq")) {
+      stop("obj needs to be a BSseq object. Can be generated using the biscuiteer package.")
+    }
+  }
+  if (type == "atac") {
+    if (!is(obj, "RangedSummarizedExperiment")) {
+      stop("obj needs to be a RangedSummarizedExperiment object. Can be generated using the ATACseeker package.")
+    }
+  }
+  if (type == "array") {
+    if (!is(obj, "GenomicRatioSet")) {
+      stop("obj needs to be an GenomicRatioSet object. Can be generated using the sesame package.")
+    }
   }
   
   #Pre-check the chromosomes to be analyzed
@@ -87,33 +112,27 @@ getCompartments <- function(obj, type = c("atac", "wgbs", "array"), res = 1e6, p
                                       regions = regions, genome = genome, preprocess = preprocess, ...)
     }
     return(compartments)
-  } else {
-    stop("obj needs to be a BSseq object. Can be generated using the biscuiteer package.")
   }
   
   # ATACseq
   # Check whether the input object is a RSE object for ATACseq data
   if (is(obj, "RangedSummarizedExperiment") & type == "atac") {
     if (allchrs == TRUE) {
-      compartments <- getATACABsignal(obj = obj, res = res, parallel = parallel, allchrs = allchrs, ...)
+      compartments <- getATACABsignal(obj = obj, res = res, parallel = parallel, allchrs = allchrs, chr = chrs, ...)
     } else {
-      compartments <- getATACABsignal(obj = obj, res = res, parallel = parallel, allchrs = FALSE, ...)
+      compartments <- getATACABsignal(obj = obj, res = res, parallel = parallel, allchrs = FALSE, chr = chrs, ...)
     }
     return(compartments)
-  } else {
-    stop("obj needs to be a RangedSummarizedExperiment object. Can be generated using the ATACseeker package.")
   }
   
   # Methylation array (e.g. 450k or EPIC)
   # Check whether the input object is an GRset object for array data
   if (is(obj, "GenomicRatioSet") & type == "array") {
     if (allchrs == TRUE) {
-      compartments <- getArrayABsignal(obj = obj, res = res, parallel = parallel, allchrs = allchrs, ...)
+      compartments <- getArrayABsignal(obj = obj, res = res, parallel = parallel, allchrs = allchrs, chr = chrs, ...)
       } else {
-      compartments <- getArrayABsignal(obj = obj, res = res, parallel = parallel, allchrs = FALSE, ...)
+      compartments <- getArrayABsignal(obj = obj, res = res, parallel = parallel, allchrs = FALSE, chr = chrs, ...)
       }
     return(compartments)
-  } else {
-    stop("obj needs to be an GenomicRatioSet object. Can be generated using the sesame package.")
   }
 }

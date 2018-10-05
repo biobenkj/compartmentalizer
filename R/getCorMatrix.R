@@ -13,6 +13,9 @@
 #' 
 #' @examples
 #' 
+#' library(GenomicRanges)
+#' library(Homo.sapiens)
+#' 
 #' #Generate random genomic intervals of 1-1000 bp on chr1-22
 #' #Modified from https://www.biostars.org/p/225520/
 #' random_genomic_int <- data.frame(chr = rep("chr14", 100))
@@ -39,7 +42,6 @@ getCorMatrix <- function(binmat, squeeze = FALSE) {
   binmat.cor <- cor(t(binmat$x))
   gr.cor  <- binmat$gr
   if (squeeze) {
-    binmat.cor <- .squeezeit(binmat.cor)
     fisherZ(binmat.cor)
     }
   message("Done...")

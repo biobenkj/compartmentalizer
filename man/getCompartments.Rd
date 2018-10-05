@@ -42,14 +42,21 @@ A p x n matrix (samples as columns and compartments as rows) to pass to embed_co
 This is a wrapper function to perform A/B compartment inference. Compartmentalizer implements a Stein estimator to shrink per-sample compartment estimates towards a global mean. The expected input for this function can be generated using packages like minfi, biscuiteer, and ATACseeker.
 }
 \examples{
-#ATAC-seq data
-data(bulkATAC_raw_filtered, package = "compartmap")
-atac_compartments <- getCompartments(filtered.data, type = "atac", parallel = FALSE, chrs = "all")
 
-#WGBS data
-data(cell_cycle_hansen_chr14, package = "compartmap")
-wgbs_compartments <- getCompartments(data.chr14, type = "wgbs", parallel = FALSE, chrs = "chr14")
+library(biscuiteer)
+library(Homo.sapiens)
+library(impute)
+
+#ATAC-seq data
+data(bulkATC_raw_filtered_chr14, package = "compartmap")
+atac_compartments <- getCompartments(filtered.data, type = "atac", parallel = FALSE, chrs = "chr14")
 
 #450k data
+data(meth_array_450k_chr14, package = "compartmap")
+array_compartments <- getCompartments(array.data.chr14, type = "array", parallel = FALSE, chrs = "chr14")
 
+\dontrun{
+#WGBS data
+data(cell_cycle_hansen_chr22, package = "compartmap")
+wgbs_compartments <- getCompartments(data.chr22, type = "wgbs", parallel = FALSE, chrs = "chr22", preprocess = TRUE)}
 }

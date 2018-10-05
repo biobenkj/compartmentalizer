@@ -35,9 +35,13 @@ This function filters and performs Dirichlet smoothing of WGBS signal prior to A
 }
 \examples{
 
+library(biscuiteer)
+library(Homo.sapiens)
+library(impute)
+
 #Load in some example data
-data(cell_cycle_hansen_chr14, package = "compartmap")
+data(cell_cycle_hansen_chr22, package = "compartmap")
 
 #Filter and impute missing data
-filt.imputed.chr14 <- filterAndImputeWGBS(data.chr14)
+filt.imputed.chr22 <- filterAndImputeWGBS(data.chr22)
 }

@@ -10,26 +10,28 @@
 #' @param res Compartment resolution (in bp)
 #' @param parallel Should the inference be done in parallel?
 #' @param allchrs Whether all autosomes should be used for A/B inference
+#' @param chr Specific chromosomes to analyze
 #' @param ... Additional arguments
 #'
 #' @return A p x n matrix (samples as columns and compartments as rows) of compartments
+#' @import minfi
 #' @export
 
-getArrayABsignal <- function(obj, res=1e6, parallel=FALSE, allchrs=FALSE, ...) {
+getArrayABsignal <- function(obj, res=1e6, parallel=FALSE, allchrs=FALSE, chr = NULL, ...) {
   globalMeanSet <- .getMeanGrSet(obj)
   columns <- colnames(obj)
   names(columns) <- columns 
   
-  getComp <- .getPaired
-  if (allchrs == TRUE) getComp <- .getPairedAllChrs
+  getComp <- .getPairedArray
+  if (allchrs == TRUE) getComp <- .getPairedAllChrsArray
   
   if (parallel) {
     options(mc.cores=detectCores()/2) # RAM blows up otherwise 
     do.call(cbind, 
-            mclapply(columns,getComp,grSet=obj,globalMeanSet=globalMeanSet))
+            mclapply(columns,getComp,grSet=obj,globalMeanSet=globalMeanSet,chr=chr))
   } else { 
     do.call(cbind, 
-            lapply(columns,getComp,grSet=obj,globalMeanSet=globalMeanSet))
+            lapply(columns,getComp,grSet=obj,globalMeanSet=globalMeanSet,chr=chr))
   } 
 }
 
@@ -318,13 +320,13 @@ getArrayABsignal <- function(obj, res=1e6, parallel=FALSE, allchrs=FALSE, ...) {
   return(subGrSet) 
 }
 
-.getPaired <- function(column, grSet, globalMeanSet=NULL, res=1e6, ...) {
+.getPairedArray <- function(column, grSet, globalMeanSet=NULL, res=1e6, ...) {
   message("Computing shrunken compartment eigenscores for ", column, "...") 
   if(is.null(globalMeanSet)) globalMeanSet <- getMeanGrSet(grSet)
   .arraycompartments(cbind(grSet[,column], globalMeanSet), keep=FALSE, resolution=res, ...)$pc
 }
 
-.getPairedAllChrs <- function(column, grSet, globalMeanSet=NULL, res=1e6, ...) {
+.getPairedAllChrsArray <- function(column, grSet, globalMeanSet=NULL, res=1e6, ...) {
   if (is.null(globalMeanSet)) globalMeanSet <- getMeanGrSet(grSet)
   chrs <- intersect(paste0("chr", 1:22), seqlevels(grSet))
   names(chrs) <- chrs

@@ -4,7 +4,8 @@
 \alias{getArrayABsignal}
 \title{Estimate A/B compartments from methylation array data}
 \usage{
-getArrayABsignal(obj, res = 1e+06, parallel = FALSE, allchrs = FALSE, ...)
+getArrayABsignal(obj, res = 1e+06, parallel = FALSE, allchrs = FALSE,
+  chr = NULL, ...)
 }
 \arguments{
 \item{obj}{Input GenomicRatioSet object}
@@ -14,6 +15,8 @@ getArrayABsignal(obj, res = 1e+06, parallel = FALSE, allchrs = FALSE, ...)
 \item{parallel}{Should the inference be done in parallel?}
 
 \item{allchrs}{Whether all autosomes should be used for A/B inference}
+
+\item{chr}{Specific chromosomes to analyze}
 
 \item{...}{Additional arguments}
 }

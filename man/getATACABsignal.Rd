@@ -4,7 +4,8 @@
 \alias{getATACABsignal}
 \title{Estimate A/B compartments from ATAC-seq data}
 \usage{
-getATACABsignal(obj, res = 1e+06, parallel = FALSE, allchrs = FALSE, ...)
+getATACABsignal(obj, res = 1e+06, parallel = FALSE, allchrs = FALSE,
+  chr = NULL, ...)
 }
 \arguments{
 \item{obj}{Input GenomicRatioSet object}
@@ -14,6 +15,8 @@ getATACABsignal(obj, res = 1e+06, parallel = FALSE, allchrs = FALSE, ...)
 \item{parallel}{Should the inference be done in parallel?}
 
 \item{allchrs}{Whether all autosomes should be used for A/B inference}
+
+\item{chr}{Specify a chromosome to analyze}
 
 \item{...}{Additional arguments}
 }
@@ -27,6 +30,9 @@ A p x n matrix (samples as columns and compartments as rows) of compartments
 This function estimates A/B compartments shrinking towards a global mean of targets or across samples
 }
 \examples{
-data(bulkATAC_raw_filtered, package = "compartmap")
-atac_compartments <- getATACABsignal(filtered.data, allchrs = TRUE)
+library(biscuiteer)
+library(Homo.sapiens)
+
+data(bulkATC_raw_filtered_chr14, package = "compartmap")
+atac_compartments <- getATACABsignal(filtered.data.chr14, chr = "chr14", genome = "hg19")
 }

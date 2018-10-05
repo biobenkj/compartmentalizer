@@ -20,11 +20,20 @@
 #' @param ... Other args
 #'
 #' @return compartment estimates
+#' @import biscuiteer
+#' @import bsseq
+#' @import parallel
+#' @import Homo.sapiens
+#' @import impute
 #' @export
 #' 
 #' @examples 
-#' data(cell_cycle_hansen_chr14, package = "compartmap")
-#' wgbs_compartments <- getWGBSABsignal(data.chr14, parallel = FALSE, chr = "chr14")
+#' library(biscuiteer)
+#' library(Homo.sapiens)
+#' library(impute)
+#' 
+#' data(cell_cycle_hansen_chr22, package = "compartmap")
+#' wgbs_compartments <- getWGBSABsignal(data.chr22, parallel = FALSE, chr = "chr22")
 
 getWGBSABsignal <- function(obj, res=1e6, globalMeanSet = NULL, noMean = FALSE, targets = NULL, parallel=FALSE, allchrs=FALSE, chr = NULL, regions = NULL, genome = "hg19", preprocess = TRUE, ...) {
   
@@ -105,13 +114,13 @@ getWGBSABsignal <- function(obj, res=1e6, globalMeanSet = NULL, noMean = FALSE, 
     getMeanPairedChr <- function(chr) { 
       message("Computing shrunken eigenscores for ", column, " on ", chr, "...") 
       binmat <- getBinMatrix(cbind(obj[,column], globalMeanSet), regions, chr = chr, res = res, FUN = mean, genome = genome)
-      cormat <- getCorMatrix(binmat)
+      cormat <- getCorMatrix(binmat, squeeze = TRUE)
       #Stupid check for perfect correlation with global mean
       if (any(is.na(cormat$binmat.cor))) {
         absig <- matrix(rep(NA, nrow(cormat$binmat.cor)))
       }
       else {
-        absig <- getABSignal(cormat)$pc
+        absig <- getABSignal(cormat, squeeze = TRUE)$pc
       }
       
       return(absig)

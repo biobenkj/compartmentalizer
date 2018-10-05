@@ -14,14 +14,18 @@ biocViews: Genetics, Epigenetics, ATACSeq, MethylSeq, MethylationArray
 Depends: R (>= 3.5.0)
 Imports: biscuiteer,
          bsseq,
+         DelayedArray,
          GenomicRanges,
          gtools,
          mixOmics,
          impute,
          parallel,
          Homo.sapiens,
-         Mus.musculus
+         Mus.musculus,
+         minfi
 Suggests: covr,
-          testthat
+          testthat,
+          uwot,
+          vizier
 RoxygenNote: 6.0.1
 Roxygen: list(markdown = TRUE)
