@@ -12,12 +12,13 @@
 #' @param chr.end    End position (in bp) to be analyzed
 #' @param res    Binning resolution (in bp)
 #' @param FUN    Function to be used to summarize information within a bin
-#' @param genome    Genome corresponding to the input data ("hg19" or "mm10")
+#' @param genome    Genome corresponding to the input data ("hg19" or "hg38")
 #' 
 #' @return    A list object to pass to getCorMatrix
 #' 
 #' @import    GenomicRanges
 #' @import    Homo.sapiens
+#' @import    BSgenome.Hsapiens.UCSC.hg38
 #' 
 #' @export 
 #' 
@@ -59,6 +60,9 @@ getBinMatrix <- function(x, genloc, chr = "chr1", chr.start = 0, chr.end = NULL,
       #                  hg19 = seqlengths(Homo.sapiens)[chr],
       #                  mm10 = seqlengths(Mus.musculus)[chr])
       chr.end <- seqlengths(Homo.sapiens)[chr]
+    }
+    if (genome == "hg38") {
+      chr.end <- seqlengths(BSgenome.Hsapiens.UCSC.hg38)[chr]
     }
     else {
       message("Don't know what to do with ", genome)

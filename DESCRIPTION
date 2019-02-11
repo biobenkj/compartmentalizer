@@ -17,6 +17,7 @@ biocViews: Genetics, Epigenetics, ATACSeq, MethylSeq, MethylationArray
 Depends: R (>= 3.5.0),
          minfi,
          Homo.sapiens,
+         BSgenome.Hsapiens.UCSC.hg38,
          mixOmics
 Imports: SummarizedExperiment,
          GenomicRanges,

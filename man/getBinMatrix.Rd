@@ -22,7 +22,7 @@ getBinMatrix(x, genloc, chr = "chr1", chr.start = 0, chr.end = NULL,
 
 \item{FUN}{Function to be used to summarize information within a bin}
 
-\item{genome}{Genome corresponding to the input data ("hg19" or "mm10")}
+\item{genome}{Genome corresponding to the input data ("hg19" or "hg38")}
 }
 \value{
 A list object to pass to getCorMatrix
