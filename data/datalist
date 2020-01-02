@@ -1,0 +1,9 @@
+bulkATAC_raw_filtered_chr14: filtered.data.chr14
+meth_array_450k_chr14: array.data.chr14
+cell_cycle_hansen_chr22.rda: bs_seq_chr22
+openSeas.hg19: openSeas.hg19
+openSeas.hg38: openSeas.hg38
+openSeas.mm10: openSeas.mm10
+openSeas.mm9: openSeas.mm9
+PMDs.hg19: PMDs.hg19
+PMDs.hg38: PMDs.hg38

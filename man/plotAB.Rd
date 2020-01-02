@@ -4,23 +4,46 @@
 \alias{plotAB}
 \title{Plots A/B compartment estimates on a per chromosome basis}
 \usage{
-plotAB(x, main = "", ylim = c(-1, 1), unitarize = FALSE,
-  reverse = FALSE, top.col = "deeppink4", bot.col = "grey50")
+plotAB(
+  x,
+  chr = NULL,
+  what = c("score", "flip.score"),
+  main = "",
+  ylim = c(-1, 1),
+  unitarize = FALSE,
+  reverse = FALSE,
+  top.col = "deeppink4",
+  bot.col = "grey50",
+  with.ci = FALSE,
+  filter = TRUE,
+  filter.min.eigen = 0.02,
+  median.conf = FALSE
+)
 }
 \arguments{
-\item{x}{The GRanges object returned from getABSignal}
+\item{x}{The matrix obejct returned from getCompartments}
+
+\item{chr}{Chromosome to subset to for plotting}
 
 \item{main}{Title for the plot}
 
 \item{ylim}{Y-axis limits (default is -1 to 1)}
 
-\item{unitarize}{Should the data be unitarized?}
+\item{unitarize}{Should the data be unitarized? (not explicitly necessary for arrays)}
 
 \item{reverse}{Reverse the sign of the PC values?}
 
 \item{top.col}{Top (pos. PC values) chromatin color to be plotted}
 
 \item{bot.col}{Bottom (neg. PC values) chromatin color to be plotted}
+
+\item{with.ci}{Whether to plot confidence intervals}
+
+\item{filter}{Whether to filter eigenvalues close to zero (default: TRUE)}
+
+\item{median.conf}{Whether to plot the median confidence estimate across the chromosome}
+
+\item{filter.lower.bound}{The minimum absolute eigenvalue to include in the plot}
 }
 \value{
 invisibly, the compartment estimates from the plot

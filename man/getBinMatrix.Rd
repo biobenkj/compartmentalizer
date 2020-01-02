@@ -4,8 +4,16 @@
 \alias{getBinMatrix}
 \title{Generate bins for A/B compartment estimation}
 \usage{
-getBinMatrix(x, genloc, chr = "chr1", chr.start = 0, chr.end = NULL,
-  res = 1e+05, FUN = sum, genome = c("hg19", "mm10"))
+getBinMatrix(
+  x,
+  genloc,
+  chr = "chr1",
+  chr.start = 0,
+  chr.end = NULL,
+  res = 1e+05,
+  FUN = sum,
+  genome = c("hg19", "hg38", "mm9", "mm10")
+)
 }
 \arguments{
 \item{x}{A p x n matrix where p (rows) = loci and n (columns) = samples/cells}
@@ -22,7 +30,7 @@ getBinMatrix(x, genloc, chr = "chr1", chr.start = 0, chr.end = NULL,
 
 \item{FUN}{Function to be used to summarize information within a bin}
 
-\item{genome}{Genome corresponding to the input data ("hg19" or "mm10")}
+\item{genome}{Genome corresponding to the input data ("hg19", "hg38", "mm9", "mm10")}
 }
 \value{
 A list object to pass to getCorMatrix

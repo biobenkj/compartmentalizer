@@ -1,7 +1,7 @@
 *.pyc
 *.Rcheck/
 *.orig
-compartmentalizer*.tar.gz
+compartmap*.tar.gz
 .DS_Store
 Rd2.pdf
 assets/
@@ -9,3 +9,11 @@ inst/doc/*.html
 *.log
 .Rproj.user
 *.Rproj
+.*.sw*
+
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData

@@ -12,13 +12,15 @@
 #' @param chr.end    End position (in bp) to be analyzed
 #' @param res    Binning resolution (in bp)
 #' @param FUN    Function to be used to summarize information within a bin
-#' @param genome    Genome corresponding to the input data ("hg19" or "mm10")
+#' @param genome    Genome corresponding to the input data ("hg19", "hg38", "mm9", "mm10")
 #' 
 #' @return    A list object to pass to getCorMatrix
 #' 
-#' @import    GenomicRanges
+#' @import    SummarizedExperiment
 #' @import    Homo.sapiens
 #' @import    Mus.musculus
+#' @import    BSgenome.Hsapiens.UCSC.hg38
+#' @import    BSgenome.Mmusculus.UCSC.mm9
 #' 
 #' @export 
 #' 
@@ -44,7 +46,9 @@
 #' #Bin counts
 #' bin.counts <- getBinMatrix(count.mat, makeGRangesFromDataFrame(random_genomic_int), chr = "chr14", genome = "hg19")
 
-getBinMatrix <- function(x, genloc, chr = "chr1", chr.start = 0, chr.end = NULL, res = 100000, FUN=sum, genome = c("hg19", "mm10")){
+getBinMatrix <- function(x, genloc, chr = "chr1", chr.start = 0,
+                         chr.end = NULL, res = 100000, FUN=sum,
+                         genome = c("hg19", "hg38", "mm9", "mm10")) {
   
   if (any(is.na(x))){
     stop("Matrix must not contain NAs")
@@ -53,15 +57,19 @@ getBinMatrix <- function(x, genloc, chr = "chr1", chr.start = 0, chr.end = NULL,
     stop("Provided GRanges must have length equal to the matrix number of rows")
   }
   
+  #which genome do we have
+  genome <- match.arg(genome)
+  
   if (is.null(chr.end)) {
-    if (genome == "hg19" | genome == "mm10") {
-      genome <- match.arg(genome)
+    if (genome %in% c("hg19", "hg38", "mm9", "mm10")) {
       chr.end <- switch(genome,
                         hg19 = seqlengths(Homo.sapiens)[chr],
+                        hg38 = seqlengths(BSgenome.Hsapiens.UCSC.hg38)[chr],
+                        mm9 = seqlengths(BSgenome.Mmusculus.UCSC.mm9)[chr],
                         mm10 = seqlengths(Mus.musculus)[chr])
     }
     else {
-      message(paste0("Don't know what to do with ", genome))
+      message("Don't know what to do with ", genome)
       stop("If you'd like to use an unsupported genome, specify chr.end to an appropriate value...")
     }
   }
@@ -77,10 +85,9 @@ getBinMatrix <- function(x, genloc, chr = "chr1", chr.start = 0, chr.end = NULL,
   
   #Get the number of bins overlapping loci
   n <- length(gr.bin)
-  message(paste0(n, " bins created..."))
+  message(n, " bins created...")
   
   #User defined function to summarize data in the bins
-  #TODO: allow for bin matrices to be generated for all chrs
   x.bin <- apply(x, 2, function(x) {
     zvec <- rep(0, n) #Generate a vector of zeroes
     a <- tapply(x, INDEX=ids, FUN=FUN) #Summarize data
@@ -94,6 +101,9 @@ getBinMatrix <- function(x, genloc, chr = "chr1", chr.start = 0, chr.end = NULL,
   #Subset the non-empty bins
   x.bin <- x.bin[wh,]
   gr.bin  <- gr.bin[wh]
+
+  #Add a check to make sure there are at least 2 bins
+  if (nrow(x.bin) < 2) stop("There are not enough non-empty bins to continue...")
   
   return(list(gr=gr.bin, x=x.bin))
 }

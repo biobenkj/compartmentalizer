@@ -4,28 +4,62 @@
 \alias{getArrayABsignal}
 \title{Estimate A/B compartments from methylation array data}
 \usage{
-getArrayABsignal(obj, res = 1e+06, parallel = FALSE, allchrs = FALSE,
-  chr = NULL, ...)
+getArrayABsignal(
+  obj,
+  res = 1e+06,
+  parallel = TRUE,
+  chr = NULL,
+  targets = NULL,
+  preprocess = TRUE,
+  cores = 2,
+  bootstrap = TRUE,
+  num.bootstraps = 1000,
+  genome = c("hg19", "hg38", "mm9", "mm10"),
+  other = NULL,
+  array.type = c("hm450", "EPIC"),
+  group = FALSE,
+  boot.parallel = TRUE,
+  boot.cores = 2
+)
 }
 \arguments{
-\item{obj}{Input GenomicRatioSet object}
+\item{obj}{Input SummarizedExperiment object}
 
-\item{res}{Compartment resolution (in bp)}
+\item{res}{Compartment resolution in bp}
 
-\item{parallel}{Should the inference be done in parallel?}
+\item{parallel}{Whether to run samples in parallel}
 
-\item{allchrs}{Whether all autosomes should be used for A/B inference}
+\item{chr}{What chromosome to work on (leave as NULL to run on all chromosomes)}
 
-\item{chr}{Specific chromosomes to analyze}
+\item{targets}{Samples/cells to shrink towards}
 
-\item{...}{Additional arguments}
+\item{preprocess}{Whether to preprocess the arrays prior to compartment inference}
+
+\item{cores}{How many cores to use when running samples in parallel}
+
+\item{bootstrap}{Whether we should perform bootstrapping of inferred compartments}
+
+\item{num.bootstraps}{How many bootstraps to run}
+
+\item{genome}{What genome to work on ("hg19", "hg38", "mm9", "mm10")}
+
+\item{other}{Another arbitrary genome to compute compartments on}
+
+\item{array.type}{What type of array is this ("hm450", "EPIC")}
+
+\item{group}{Whether to treat this as a group set of samples}
+
+\item{boot.parallel}{Whether to run the bootstrapping in parallel}
+
+\item{boot.cores}{How many cores to use for the bootstrapping}
 }
 \value{
-A p x n matrix (samples as columns and compartments as rows) of compartments
+A RaggedExperiment of inferred compartments
 }
 \description{
 \code{getArrayABsignal} returns estimated A/B compartments from methylation array data.
 }
-\details{
-This function is modified from the minfi::compartments to infer A/B compartments from array data
+\examples{
+data("meth_array_450k_chr14", package = "compartmap")
+array_compartments <- getArrayABsignal(array.data.chr14, parallel=F, chr="chr14", bootstrap=F, genome="hg19", array.type="hm450")
 }

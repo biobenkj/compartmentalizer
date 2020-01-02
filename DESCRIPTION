@@ -1,31 +1,43 @@
 Package: compartmap
 Type: Package
-Title: A/B compartment inference from ATAC-seq, WGBS, and methylation array data
-Description: A longer statement about what this does.
-Version: 0.99.1
-Date: 2018-09-12
-Author: Benjamin K Johnson [aut, cre], Tim Triche, Jr. [aut, cre], Kasper Hansen [aut, cre], Jean-Philippe Fortin [aut, cre] 
-Maintainer: Benjamin K Johnson <ben.johnson@vai.org>
+Title: A/B compartment inference from ATAC-seq and methylation array data
+Description: Compartmap performs shrunken A/B compartment inference from ATAC-seq, BS-seq, and methylation arrays.
+Version: 1.65.75
+Date: 2019-12-09
+Authors@R: c(person("Benjamin", "Johnson", role = c("aut", "cre"),
+                    email = "ben.johnson@vai.org",),
+             person("Tim", "Triche", role = c("aut")),
+             person("Kasper", "Hansen", role = c("aut")),
+             person("Jean-Philippe", "Fortin", role = c("aut")))
 URL: https://github.com/biobenkj/compartmap
 BugReports: https://github.com/biobenkj/compartmap/issues
 Encoding: UTF-8
-License: MIT + file LICENSE
+License: GPL-3 + file LICENSE
 biocViews: Genetics, Epigenetics, ATACSeq, MethylSeq, MethylationArray
-Depends: R (>= 3.5.0)
-Imports: biscuiteer,
-         bsseq,
-         DelayedArray,
-         GenomicRanges,
-         gtools,
-         mixOmics,
-         impute,
-         parallel,
+Depends: R (>= 3.6.0),
+         SummarizedExperiment,
+	 RaggedExperiment,
          Homo.sapiens,
-         Mus.musculus,
-         minfi
+	 BSgenome.Hsapiens.UCSC.hg38,
+	 Mus.musculus,
+	 BSgenome.Mmusculus.UCSC.mm9,
+	 BiocSingular,
+	 bsseq
+Imports: GenomicRanges,
+         gtools,
+         parallel,
+         grid,
+         pbapply,
+	 viridis,
+	 ggplot2,
+	 DelayedMatrixStats,
+	 impute,
+	 Matrix,
+	 RANN,
+	 igraph
 Suggests: covr,
           testthat,
-          uwot,
-          vizier
-RoxygenNote: 6.0.1
+          knitr
+RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr

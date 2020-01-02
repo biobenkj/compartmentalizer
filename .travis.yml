@@ -13,17 +13,28 @@ script:
 r_github_packages:
   - r-lib/covr
 
-bioc_packages: 
-  - gmapR
-  - IRanges
-  - S4Vectors
-  - Rsamtools
-  - Biostrings
-  - rtracklayer
-  - BiocGenerics
+r_packages:
+  - gtools
+  - parallel
+  - roxygen2
+  - testthat
+  - knitr
+  - grid
+  - pbapply
+  - viridis
+  - ggplot2
+  - impute
+  - devtools
+
+bioc_packages:
+  - BiocSingular
   - Homo.sapiens
-  - VariantTools
   - GenomicRanges
-  - GenomicAlignments 
-  - VariantAnnotation
+  - GenomicAlignments
   - SummarizedExperiment
+  - BiocStyle
+  - BSgenome.Hsapiens.UCSC.hg38
+  - BSgenome.Mmusculus.UCSC.mm9
+  - bsseq
+  - RaggedExperiment
+  - DelayedMatrixStats
