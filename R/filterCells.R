@@ -11,7 +11,7 @@
 #' @param invert Invert which cluster is used to filter
 #'
 #' @return A filtered RangedSummarizedExperiment object and/or plot of the filtered data
-#' @export
+#'
 #' @import RColorBrewer
 #' @import grid
 #' @import SummarizedExperiment
@@ -20,7 +20,9 @@
 #'
 #' @examples
 #'
-
+#' # FIXME: add example
+#' 
+#' @export
 filterCells <- function(sparsity.mat, rse.obj, cluster.method = c("kmeans", "dpmeans"),
                         clusters = NULL, tol = 0.1, plot.data = FALSE, invert = FALSE) {
   #this function is to filter out poor/low quality cells given the sparsity metrics

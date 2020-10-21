@@ -20,14 +20,19 @@ summarizeBootstraps <- function(boot.list, est.ab, q = 0.95,
   est.ab$score <- est.ab$pc
   message("Summarizing bootstraps.")
   #initialize open and closed counts to enumerate
-  est.ab$boot.open <- 0
-  est.ab$boot.closed <- 0
+  #est.ab$boot.open <- 0
+  #est.ab$boot.closed <- 0
   #filter out failed compartment estimates
   boot.list <- removeEmptyBoots(boot.list)
   #summarize
-  lapply(boot.list, function(b) {
+  #create a dummy matrix and then rowSum them up
+  boot.summary.mat.lst <- lapply(boot.list, function(b) {
     #add the pc to the granges object
     b$score <- b$pc
+    #generate a dummy GRanges object
+    est.ab.dummy <- est.ab
+    est.ab.dummy$boot.open <- 0
+    est.ab.dummy$boot.closed <- 0
     #convert to binary result for proportions
     #logic for methylation
     #open = eigen < 0
@@ -43,16 +48,23 @@ summarizeBootstraps <- function(boot.list, est.ab, q = 0.95,
       b$closed <- ifelse(b$score > 0, 1, 0)
     }
     #overlap by common intervals
-    ol <- findOverlaps(b, est.ab)
-    mcols(est.ab)$boot.open[subjectHits(ol)] <<- mcols(est.ab)$boot.open[subjectHits(ol)] + mcols(b)$open[queryHits(ol)]
-    mcols(est.ab)$boot.closed[subjectHits(ol)] <<- mcols(est.ab)$boot.closed[subjectHits(ol)] + mcols(b)$closed[queryHits(ol)]
+    ol <- findOverlaps(b, est.ab.dummy)
+    mcols(est.ab.dummy)$boot.open[subjectHits(ol)] <- mcols(est.ab.dummy)$boot.open[subjectHits(ol)] + mcols(b)$open[queryHits(ol)]
+    mcols(est.ab.dummy)$boot.closed[subjectHits(ol)] <- mcols(est.ab.dummy)$boot.closed[subjectHits(ol)] + mcols(b)$closed[queryHits(ol)]
+    #return the dummy mcols for bootstrapped open and closed calls
+    return(as.matrix(cbind(mcols(est.ab.dummy)$boot.open,
+                           mcols(est.ab.dummy)$boot.closed)))
   })
+  
+  #eunumerate bootstraps
+  est.ab$boot.open <- rowSums(do.call("cbind", lapply(boot.summary.mat.lst, function(x) x[,1])))
+  est.ab$boot.closed <- rowSums(do.call("cbind", lapply(boot.summary.mat.lst, function(x) x[,2])))
   
   message("Computing Agresti-Coull 95% confidence intervals.")
   est.ab$conf.est <- 0
   est.ab$conf.est.upperCI <- 0
   est.ab$conf.est.lowerCI <- 0
-  lapply(1:length(est.ab), function(e) {
+  conf.int <- lapply(1:length(est.ab), function(e) {
     #compute intervals
     if (est.ab[e,]$score > 0) {
       if (assay == "atac") {
@@ -68,9 +80,13 @@ summarizeBootstraps <- function(boot.list, est.ab, q = 0.95,
       }
       
       #this really isn't a good idea...
-      est.ab[e,]$conf.est.lowerCI <<- est[1]
-      est.ab[e,]$conf.est <<- est[2]
-      est.ab[e,]$conf.est.upperCI <<- est[3]
+      #so... don't do it?
+      #just return the ests
+      #it will be the same length as est.ab
+      return(est)
+      #est.ab[e,]$conf.est.lowerCI <<- est[1]
+      #est.ab[e,]$conf.est <<- est[2]
+      #est.ab[e,]$conf.est.upperCI <<- est[3]
     }
     if (est.ab[e,]$score < 0) {
       if (assay == "atac") {
@@ -85,10 +101,19 @@ summarizeBootstraps <- function(boot.list, est.ab, q = 0.95,
                               q = 0.95)
       }
       #this really isn't a good idea...
-      est.ab[e,]$conf.est.lowerCI <<- est[1]
-      est.ab[e,]$conf.est <<- est[2]
-      est.ab[e,]$conf.est.upperCI <<- est[3]
+      #est.ab[e,]$conf.est.lowerCI <<- est[1]
+      #est.ab[e,]$conf.est <<- est[2]
+      #est.ab[e,]$conf.est.upperCI <<- est[3]
+      return(est)
     }
   })
+  
+  #combine the conf.est results into something sensible and bind with est.ab
+  conf.int.ests <- do.call("rbind", conf.int)
+  #should be of the form:
+  #conf.est.lowerCI conf.est conf.est.upperCI
+  est.ab$conf.est.lowerCI <- conf.int.ests[,1]
+  est.ab$conf.est <- conf.int.ests[,2]
+  est.ab$conf.est.upperCI <- conf.int.ests[,3]
   return(est.ab)
 }

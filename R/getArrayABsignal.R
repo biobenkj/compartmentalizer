@@ -27,11 +27,13 @@
 #' @import Mus.musculus
 #' @import BSgenome.Hsapiens.UCSC.hg38
 #' @import BSgenome.Mmusculus.UCSC.mm9
-#' @export
+#'
 #' @examples
+#'
 #' data("meth_array_450k_chr14", package = "compartmap")
-#' array_compartments <- getArrayABsignal(array.data.chr14, parallel=F, chr="chr14", bootstrap=F, genome="hg19", array.type="hm450")
-
+#' array_compartments <- getArrayABsignal(array.data.chr14, parallel=FALSE, chr="chr14", bootstrap=FALSE, genome="hg19", array.type="hm450")
+#'
+#' @export
 getArrayABsignal <- function(obj, res = 1e6, parallel = TRUE, chr = NULL,
                              targets = NULL, preprocess = TRUE, cores = 2,
                              bootstrap = TRUE, num.bootstraps = 1000,
@@ -174,10 +176,14 @@ getArrayABsignal <- function(obj, res = 1e6, parallel = TRUE, chr = NULL,
 #'
 #' @return A preprocessed SummarizedExperiment to compute compartments
 #' @import SummarizedExperiment
-#' @export
 #'
 #' @examples
-#' 
+#' if (require(minfiData)) {
+#'   grSet <- mapToGenome(ratioConvert(preprocessNoob(RGsetEx.sub)))
+#'   preprocessArrays(grSet)
+#' } 
+#'
+#' @export
 preprocessArrays <- function(obj,
                              genome = c("hg19", "hg38", "mm9", "mm10"),
                              other = NULL, array.type = c("hm450", "EPIC")) {
@@ -199,8 +205,10 @@ preprocessArrays <- function(obj,
   assays(obj.opensea)$Beta <- flogit(assays(obj.opensea)$Beta)
   
   #impute missing values and drop samples that are too sparse
-  message("Imputing missing values.")
-  obj.opensea.imputed <- imputeKNN(obj.opensea, assay = "array")
+  if (any(is.na(getBeta(obj.opensea)))) {
+    message("Imputing missing values.")
+    obj.opensea <- imputeKNN(obj.opensea, assay = "array")
+  }
   
-  return(obj.opensea.imputed)
+  return(obj.opensea)
 }

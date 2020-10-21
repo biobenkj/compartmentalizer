@@ -6,17 +6,17 @@
 \usage{
 getATACABsignal(
   obj,
-  res = 1e+06,
-  parallel = TRUE,
+  res = 1000000,
+  parallel = FALSE,
   chr = NULL,
   targets = NULL,
   cores = 2,
   bootstrap = TRUE,
-  num.bootstraps = 1000,
+  num.bootstraps = 100,
   genome = c("hg19", "hg38", "mm9", "mm10"),
   other = NULL,
   group = FALSE,
-  boot.parallel = TRUE,
+  boot.parallel = FALSE,
   boot.cores = 2
 )
 }

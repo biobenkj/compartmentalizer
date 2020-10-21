@@ -1,4 +1,4 @@
-# Compartmap: Shrunken A/B compartment inference from ATAC-seq and methylation arrays
+# Compartmap: chromatin compartments from DNA methylation, ATACseq, and RNAseq 
 
 [![Build Status](https://travis-ci.org/biobenkj/compartmap.svg?branch=master)](https://travis-ci.org/biobenkj/compartmap)  [![codecov](https://codecov.io/gh/biobenkj/compartmentalizer/branch/master/graph/badge.svg)](https://codecov.io/gh/biobenkj/compartmap)
 

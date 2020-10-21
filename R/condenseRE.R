@@ -17,14 +17,16 @@ condenseRE <- function(obj) {
   #it will build a list of SummarizedExperiments with relevant information
   #from computing compartments
   if (!is(obj, "RaggedExperiment")) stop("Input needs to be a RaggedExperiment")
-  se_list <- lapply(1:length(getAssayNames(obj)), function(a) {
+  se_list <- lapply(1:length(assayNames(obj)), function(a) {
     compactSummarizedExperiment(obj, i = a)
   })
-  names(se_list) <- getAssayNames(obj)
+  #do NOT use getAssayNames here
+  #for some reason it causes memory to skyrocket
+  names(se_list) <- assayNames(obj)
   return(se_list)
 }
 
-#' Condense a the output of condenseRE to reconstruct per-sample GRanges objects to plot
+#' Condense the output of condenseRE to reconstruct per-sample GRanges objects to plot
 #'
 #' @param obj Output of condenseRE or can be a RaggedExperiment
 #' @param sample.name Vector of samples/cells to extract
@@ -53,7 +55,7 @@ condenseSE <- function(obj, sample.name = NULL) {
     obj.dense <- lapply(1:length(obj), function(a) {
       gr.sub <- granges(obj[[a]])
       mcols(gr.sub) <- assay(obj[[a]])[,sample.name]
-      names(mcols(gr.sub)) <- getAssayNames(obj[[a]])
+      names(mcols(gr.sub)) <- assayNames(obj[[a]])
       return(gr.sub)
     })
     return(Reduce("merge", obj.dense))
@@ -62,7 +64,7 @@ condenseSE <- function(obj, sample.name = NULL) {
       obj.dense <- lapply(1:length(obj), function(a) {
         gr.sub <- granges(obj[[a]])
         mcols(gr.sub) <- assay(obj[[a]])[,s]
-        names(mcols(gr.sub)) <- getAssayNames(obj[[a]])
+        names(mcols(gr.sub)) <- assayNames(obj[[a]])
         return(gr.sub)
       })
       return(Reduce("merge", obj.dense))

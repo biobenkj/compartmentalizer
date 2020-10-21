@@ -4,10 +4,10 @@
 \alias{flogit}
 \title{Helper function: squeezed logit}
 \usage{
-flogit(x, sqz = 1e-06)
+flogit(p, sqz = 0.000001)
 }
 \arguments{
-\item{x}{a vector of values between 0 and 1 inclusive}
+\item{p}{a vector of values between 0 and 1 inclusive}
 
 \item{sqz}{the amount by which to 'squeeze', default is .000001}
 }
@@ -17,4 +17,18 @@ flogit(x, sqz = 1e-06)
 }
 \description{
 Helper function: squeezed logit
+}
+\examples{
+
+  set.seed(1234)
+  p <- runif(n=1000)
+  summary(p) 
+
+  sqz <- 1 / (10**6)
+  x <- flogit(p, sqz=sqz)
+  summary(x) 
+
+  all( abs(p - fexpit(x, sqz=sqz)) < sqz )
+  all( abs(p - fexpit(flogit(p, sqz=sqz), sqz=sqz)) < sqz ) 
+
 }

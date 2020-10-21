@@ -37,4 +37,6 @@ Filter cells using either k-means or Dirichlet process means clustering of spars
 }
 \examples{
 
+# FIXME: add example
+
 }

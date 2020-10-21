@@ -20,11 +20,12 @@
 #' @return Compartment estimates with summarized bootstraps and confidence intervals
 #' @import parallel
 #' @import SummarizedExperiment
-#' @export
 #'
 #' @examples
+#'   
+#' # this needs a good example
 #' 
-
+#' @export
 bootstrapCompartments <- function(obj, original.obj, bootstrap.samples = 1000,
                                   chr = "chr14", assay = c("array", "atac", "bisulfite"),
                                   parallel = TRUE, cores = 2, targets = NULL, res = 1e6,

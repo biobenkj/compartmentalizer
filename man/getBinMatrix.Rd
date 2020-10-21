@@ -10,7 +10,7 @@ getBinMatrix(
   chr = "chr1",
   chr.start = 0,
   chr.end = NULL,
-  res = 1e+05,
+  res = 100000,
   FUN = sum,
   genome = c("hg19", "hg38", "mm9", "mm10")
 )
@@ -45,12 +45,11 @@ This function is used to generate a list object to be passed to getCorMatrix
 \examples{
 
 library(GenomicRanges)
-library(Homo.sapiens)
 
 #Generate random genomic intervals of 1-1000 bp on chr1-22
 #Modified from https://www.biostars.org/p/225520/
 random_genomic_int <- data.frame(chr = rep("chr14", 100))
-random_genomic_int$start <- apply(random_genomic_int, 1, function(x) { round(runif(1, 0, seqlengths(Homo.sapiens)[x][[1]]), 0) })
+random_genomic_int$start <- apply(random_genomic_int, 1, function(x) { round(runif(1, 0, getSeqLengths(chr = x)[[1]]), 0) })
 random_genomic_int$end <- random_genomic_int$start + runif(1, 1, 1000)
 random_genomic_int$strand <- "*"
 

@@ -4,12 +4,12 @@
 \alias{fexpit}
 \title{Helper function: expanded expit}
 \usage{
-fexpit(x, sqz = 1e-06)
+fexpit(x, sqz = 0.000001)
 }
 \arguments{
 \item{x}{a vector of values between -Inf and +Inf}
 
-\item{sqz}{the amount by which to 'squeeze', default is .000001}
+\item{sqz}{the amount by which we 'squoze', default is .000001}
 }
 \value{
 \preformatted{   a vector of values between 0 and 1 inclusive
@@ -17,4 +17,18 @@ fexpit(x, sqz = 1e-06)
 }
 \description{
 Helper function: expanded expit
+}
+\examples{
+
+  set.seed(1234)
+  x <- rnorm(n=1000)
+  summary(x) 
+
+  sqz <- 1 / (10**6)
+  p <- fexpit(x, sqz=sqz)
+  summary(p)
+
+  all( (abs(x - flogit(p)) / x) < sqz )
+  all( abs(x - flogit(fexpit(x))) < sqz )
+
 }

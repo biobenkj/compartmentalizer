@@ -6,7 +6,7 @@
 \usage{
 getArrayABsignal(
   obj,
-  res = 1e+06,
+  res = 1000000,
   parallel = TRUE,
   chr = NULL,
   targets = NULL,
@@ -60,6 +60,8 @@ A RaggedExperiment of inferred compartments
 \code{getArrayABsignal} returns estimated A/B compartments from methylation array data.
 }
 \examples{
+
 data("meth_array_450k_chr14", package = "compartmap")
-array_compartments <- getArrayABsignal(array.data.chr14, parallel=F, chr="chr14", bootstrap=F, genome="hg19", array.type="hm450")
+array_compartments <- getArrayABsignal(array.data.chr14, parallel=FALSE, chr="chr14", bootstrap=FALSE, genome="hg19", array.type="hm450")
+
 }

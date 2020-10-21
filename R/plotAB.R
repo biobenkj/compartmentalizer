@@ -29,7 +29,7 @@
 #' #Generate random genomic intervals of 1-1000 bp on chr1-22
 #' #Modified from https://www.biostars.org/p/225520/
 #' random_genomic_int <- data.frame(chr = rep("chr14", 100))
-#' random_genomic_int$start <- apply(random_genomic_int, 1, function(x) { round(runif(1, 0, seqlengths(Homo.sapiens)[x][[1]]), 0) })
+#' random_genomic_int$start <- apply(random_genomic_int, 1, function(x) { round(runif(1, 0, getSeqLengths(chr = x)[[1]]), 0) })
 #' random_genomic_int$end <- random_genomic_int$start + runif(1, 1, 1000)
 #' random_genomic_int$strand <- "*"
 #' 
@@ -85,8 +85,8 @@ plotAB <- function(x, chr = NULL, what = c("score", "flip.score"), main="",ylim=
     if (is(x, "GRanges")) {
       if (!is.null(chr)) x <- keepSeqlevels(x, chr, pruning.mode = "coarse")
       if (("conf.est" %in% names(mcols(x)))) {
-        if (filter) x <- x[abs(x$what) > filter.min.eigen,]
-        x.mat <- x$what
+        if (filter) x <- x[abs(as(mcols(x)[what], "matrix")) > filter.min.eigen,]
+        x.mat <- as(mcols(x)[what], "matrix")
         if (unitarize) x.mat <- .unitarize(x.mat)
         x.mat <- as.numeric(x.mat)
         if (reverse) x.mat <- -x.mat

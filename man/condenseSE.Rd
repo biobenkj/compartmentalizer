@@ -2,7 +2,7 @@
 % Please edit documentation in R/condenseRE.R
 \name{condenseSE}
 \alias{condenseSE}
-\title{Condense a the output of condenseRE to reconstruct per-sample GRanges objects to plot}
+\title{Condense the output of condenseRE to reconstruct per-sample GRanges objects to plot}
 \usage{
 condenseSE(obj, sample.name = NULL)
 }
@@ -15,7 +15,7 @@ condenseSE(obj, sample.name = NULL)
 GRanges or list of per-sample GRanges to pass to plotAB or export
 }
 \description{
-Condense a the output of condenseRE to reconstruct per-sample GRanges objects to plot
+Condense the output of condenseRE to reconstruct per-sample GRanges objects to plot
 }
 \examples{
 grl <- GRangesList(GRanges(c("A:1-5", "A:4-6", "A:10-15"), score=1:3),
